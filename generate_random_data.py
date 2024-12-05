@@ -1,23 +1,26 @@
+"""
+This script generates some data meant to represent what the distance sensor
+captures, assuming the beacons are classified flawlessly
+"""
+
+
 import numpy as np
 from numpy.random import randn, rand
-from numpy.linalg import norm
 import csv
 
 # Calculate distance between two points and add noise
 def get_radius(x,y,x0,y0,noise_var = 0):
     r = np.sqrt((x-x0)**2 + (y-y0)**2)
     r = r + np.sqrt(noise_var)*randn()
-
     return r
-
 
 if __name__ == "__main__":
 
-    n = 0.5 # Noise power
-    n_rows = 100 # Number of rows
+    n = 0.01 # Noise power
+    n_rows = 10 # Number of rows
 
     # Beacon positions
-    k = 10 # Distance between beacons
+    k = 50 # Distance between beacons
 
     x0, y0 = k*np.array([0,0])
     x1, y1 = k*np.array([1,0])
@@ -37,4 +40,5 @@ if __name__ == "__main__":
             r2 = get_radius(x,y,x2,y2,n)
             r3 = get_radius(x,y,x3,y3,n)
             
-            writer.writerow([r0,r1,r2,r3,x,y])
+            # Note: we don't save the r3
+            writer.writerow([r0,r1,r2,x,y])

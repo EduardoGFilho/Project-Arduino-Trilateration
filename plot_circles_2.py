@@ -1,5 +1,7 @@
-# Still gpt code 
-
+"""
+This script was written with aid from chatGPT to plot the central positions
+and the estimated position the trilateration will return.
+"""
 
 import matplotlib.pyplot as plt
 import numpy as np

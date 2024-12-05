@@ -7,7 +7,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib import collections
 from generate_random_data import get_radius
-from utils import load_simu_data
+from utils import load_simu_data, get_dxdy_model
 
 if __name__ == "__main__":
 
@@ -67,11 +67,17 @@ if __name__ == "__main__":
     dx = np.abs(X - X_hat)
     dy = np.abs(Y - Y_hat)
 
-    #for i in range(len(X)):
+    # 3*std_dev == 99% accuracy
+    dx2,dy2 = get_dxdy_model(3*np.sqrt(0.5),R1,R2,R3,X1,X2,X3,Y1,Y2,Y3)
 
     coll = collections.EllipseCollection(dx, dy,np.zeros_like(R), offsets=np.transpose([X,Y]),
                                         units='x', color = "red", alpha = 0.4, offset_transform=ax.transData,
-                                        label = "Error Radius")
+                                        label = "Error Radius Calculated")
+    ax.add_collection(coll)
+
+    coll = collections.EllipseCollection(dx2, dy2,np.zeros_like(R), offsets=np.transpose([X,Y]),
+                                        units='x', color = "green", alpha = 0.4, offset_transform=ax.transData,
+                                        label = "Error Radius Model")
     ax.add_collection(coll)
 
     # Add a legend
