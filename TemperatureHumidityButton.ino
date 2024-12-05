@@ -8,8 +8,6 @@
 #define BLUETOOTHPIN1 0
 #define BLUETOOTHPIN2 1
 
-
-
 float temp = 0;
 float hum = 0;
 float maxTemp = temp;
