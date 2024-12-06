@@ -67,15 +67,17 @@ if __name__ == "__main__":
     dx = np.abs(X - X_hat)
     dy = np.abs(Y - Y_hat)
 
-    #for i in range(len(X)):
+    dr = np.sqrt(dx**2 + dy**2)
 
-    coll = collections.EllipseCollection(dx, dy,np.zeros_like(R), offsets=np.transpose([X,Y]),
-                                        units='x', color = "red", alpha = 0.4, offset_transform=ax.transData,
-                                        label = "Error Radius")
-    ax.add_collection(coll)
+    for i in range(len(X)):
+        # Create the circle with center at point1, radius, filled, and with transparency
+        circle = plt.Circle([X[i],Y[i]], dr[i], color='r', alpha=0.3, fill=True)
 
-    # Add a legend
-    ax.legend()
+        # Add the circle to the plot
+        ax.add_artist(circle)
+
+    # Set the aspect ratio of the plot to be equal, so the circle isn't distorted
+    ax.set_aspect('equal', 'box')
 
     # Set the aspect ratio of the plot to be equal, so the circle isn't distorted
     ax.set_aspect('equal', 'box')

@@ -42,12 +42,6 @@ if __name__ == "__main__":
     X_hat = (C*E - F*B) / (E*A - B*D)
     Y_hat = (C*D - A*F) / (B*D - A*E)
 
-    E_y = np.abs(Y_hat - Y)
-    E_x = np.abs(X_hat - X)
-
-    E = np.sqrt(E_y**2 + E_x**2)
-
-    print(E[:10])
 
     # Below is code from chatGPT, to plot the data
 
@@ -67,21 +61,19 @@ if __name__ == "__main__":
     dx = np.abs(X - X_hat)
     dy = np.abs(Y - Y_hat)
 
+    dr = np.sqrt(dx**2 + dy**2)
+
     # 3*std_dev == 99% accuracy
-    dx2,dy2 = get_dxdy_model(3*np.sqrt(0.5),R1,R2,R3,X1,X2,X3,Y1,Y2,Y3)
+    dx2,dy2 = get_dxdy_model(2*np.sqrt(0.5),R1,R2,R3,X1,X2,X3,Y1,Y2,Y3)
+    dr2 = np.sqrt(dx2**2 + dy2**2)
 
-    coll = collections.EllipseCollection(dx, dy,np.zeros_like(R), offsets=np.transpose([X,Y]),
-                                        units='x', color = "red", alpha = 0.4, offset_transform=ax.transData,
-                                        label = "Error Radius Calculated")
-    ax.add_collection(coll)
-
-    coll = collections.EllipseCollection(dx2, dy2,np.zeros_like(R), offsets=np.transpose([X,Y]),
-                                        units='x', color = "green", alpha = 0.4, offset_transform=ax.transData,
-                                        label = "Error Radius Model")
-    ax.add_collection(coll)
-
-    # Add a legend
-    ax.legend()
+    for i in range(len(X)):
+        circle = plt.Circle([X[i],Y[i]], dr[i], color='r', alpha=0.3, fill=True)
+        ax.add_artist(circle)
+    
+    for i in range(len(X)):
+        circle = plt.Circle([X[i],Y[i]], dr2[i], color='g', alpha=0.3, fill=True)
+        ax.add_artist(circle)
 
     # Set the aspect ratio of the plot to be equal, so the circle isn't distorted
     ax.set_aspect('equal', 'box')
@@ -95,6 +87,8 @@ if __name__ == "__main__":
     # Set limits for the plot to ensure the entire circle and points are visible
     ax.set_xlim(-10, 60)
     ax.set_ylim(-10,60)
+    plt.legend()
 
     # Show the plot
+    plt.savefig("trilateration_simu.png")
     plt.show()
